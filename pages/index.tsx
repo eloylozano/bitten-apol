@@ -1,27 +1,24 @@
-import { useSession, signIn, signOut } from "next-auth/react";
-import Nav from "@/components/Nav"
+import Layout from "@/components/Layout";
+import { useSession } from "next-auth/react";
 
 export default function Home() {
   const { data: session } = useSession();
-  if (!session) {
-    return (
-      <div className="bg-blue-900 w-screen h-screen flex items-center">
-        <div className="text-center w-full">
-          <button
-            onClick={() => signIn("google")}
-            className="bg-white p-2 px-4 rounded-lg"
-          >
-            Login with Google
-          </button>
-        </div>
-      </div>
-    );
-  }
+  const userImage = session?.user?.image ?? "/default-avatar.jpg"; // Usa una imagen por defecto si no hay una en la sesión
+
+  console.log({ session });
 
   return (
-    <div className="bg-blue-900 min-h-screen flex">
-      <Nav></Nav>
-      <div className="bg-white flex-grow mt-2 mr-2 mb-2 rounded-lg p-4">logged in {session.user.email}</div>
-    </div>
+    <Layout>
+      <div className="text-blue-900 flex justify-between">
+        <h2>
+          Hello, <b>{session?.user?.name}</b>
+        </h2>
+
+        <div className="flex bg-gray-300 text-black gap-1  rounded-lg overflow-hidden">
+          <img src={userImage} alt="User mail image" className="w-6 h-6 " />
+          <span className="px-2">{session?.user?.name}</span>
+        </div>
+      </div>
+    </Layout>
   );
 }
