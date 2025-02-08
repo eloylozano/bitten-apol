@@ -1,7 +1,7 @@
 import { useSession, signIn, signOut } from "next-auth/react";
-import Nav from "@/components/Nav"
+import Nav from "@/components/Nav";
 
-export default function Layout({children}) {
+export default function Layout({ children }) {
   const { data: session } = useSession();
   if (!session) {
     return (
@@ -20,7 +20,7 @@ export default function Layout({children}) {
 
   return (
     <div className="bg-blue-900 min-h-screen flex">
-      <Nav></Nav>
+      <Nav />
       <div className="bg-white flex-grow mt-2 mr-2 mb-2 rounded-lg p-4">
         {children}
       </div>
