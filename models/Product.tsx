@@ -1,5 +1,5 @@
-import mongoose, {model, Schema, models} from "mongoose";
 
+import mongoose, {model, Schema, models} from "mongoose";
 const ProductSchema = new Schema({
   title: {type:String, required:true},
   description: String,
@@ -8,4 +8,3 @@ const ProductSchema = new Schema({
   timestamps: true,
 });
 
-export const Product = models.Product || model('Product', ProductSchema);
