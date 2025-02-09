@@ -26,9 +26,7 @@ export default function ProductForm({
   }
 
   return (
-    <Layout>
       <form onSubmit={createProduct}>
-        <h1>New Product</h1>
         <label>Product name</label>
         <input
           type="text"
@@ -56,6 +54,5 @@ export default function ProductForm({
           Save
         </button>
       </form>
-    </Layout>
   );
 }
