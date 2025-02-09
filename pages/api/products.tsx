@@ -24,9 +24,14 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 
   if (method === 'PUT') {
     const { _id, title, description, price } = req.body;
-
     await Product.updateMany({ _id }, { title, description, price });
     res.json(true)
   }
 
+  if (method === 'DELETE') {
+    if (req.query?.id) {
+      await Product.deleteOne({_id:req.query?.id});
+      res.json(true);
+    }
+  }
 }
