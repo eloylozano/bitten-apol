@@ -1,6 +1,5 @@
 import ProductForm from "@/components/ProductForm";
 import Layout from "@/components/Layout";
-
 import { useState } from "react";
 import axios from "axios";
 import { redirect } from "next/dist/server/api-utils";
@@ -31,4 +30,14 @@ export default function NewProduct() {
       <ProductForm />
     </Layout>
   );
+import ProductForm from "@/components/ProductForm";
+
+
+export default function NewProduct() {
+  return (
+    <Layout>
+      <h1>Add New Product</h1>
+      <ProductForm/>
+    </Layout>
+  )
 }
