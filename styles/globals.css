@@ -1,6 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import '@fontsource/roboto';
+
+body {
+  font-family: 'Roboto', sans-serif;
+}
 
 img{
   max-height: 100%;
@@ -14,23 +19,23 @@ textarea {
 
 input:focus,
 input:focus {
-  @apply border-2 border-blue-500;
+  @apply border-2 border-slate-500;
 }
 
 h1 {
-  @apply text-blue-900 text-2xl mb-4;
+  @apply text-slate-900 text-2xl mb-4 font-bold;
 }
 
 h2 {
-  @apply text-blue-900 text-xl mb-4;
+  @apply text-slate-900 text-xl mb-4;
 }
 
 label {
-  @apply text-blue-900;
+  @apply text-slate-900;
 }
 
 .btn-primary {
-  @apply bg-blue-900 text-white px-4 py-1 rounded-md;
+  @apply bg-slate-900 text-white px-4 py-1 rounded-md;
 }
 
 table.basic{
@@ -38,15 +43,11 @@ table.basic{
 }
 
 table.basic thead tr td{
-  @apply bg-blue-100;
+  @apply bg-slate-100;
 }
 
 table.basic tr td{
-  @apply border border-blue-300 p-1;
-}
-
-table.basic a{
-  @apply bg-blue-900 text-white text-sm p-1 py-1 px-2 rounded-md inline-flex gap-1;
+  @apply border border-slate-300 p-1;
 }
 
 table.basic {
@@ -54,23 +55,23 @@ table.basic {
 }
 
 table.basic thead tr td {
-  @apply bg-blue-100;
+  @apply bg-slate-100;
 }
 
 table.basic tr td {
-  @apply border border-blue-300 p-1;
+  @apply border border-slate-300 p-1;
 }
 
 table.basic a {
-  @apply bg-blue-900 text-white text-sm p-1 py-1 px-2 rounded-md inline-flex gap-1 mr-1;
+  @apply text-white text-sm p-1 py-1 px-2 rounded-md inline-flex gap-1 mr-1 justify-center content-center;
 }
 
 .btn-default, .btn-red{
-  @apply px-4 py-1 rounded-md;
+  @apply px-4 py-1 rounded-md ;
 }
 
 .btn-red{
-  @apply bg-red-800 text-white;
+  @apply bg-red-700 text-white;
 }
 
 .btn-default{
