@@ -5,13 +5,21 @@ import Spinner from "@/components/Spinner";
 import { useRouter } from "next/router";
 import { ReactSortable } from "react-sortablejs";
 
+interface ProductFormProps {
+  _id?: string;
+  title: string;
+  description: string;
+  price: number;
+  images: string[];
+}
+
 export default function ProductForm({
   _id,
   title: existingTitle,
   description: existingDescription,
   price: existingPrice,
   images: existingImages,
-}) {
+}: ProductFormProps) {
   const [title, setTitle] = useState(existingTitle || "");
   const [description, setdDescription] = useState(existingDescription || "");
   const [price, setPrice] = useState(existingPrice || "");
@@ -68,10 +76,10 @@ export default function ProductForm({
       />
       <label>Photos</label>
       <div className="mb-2 flex flex-wrap gap-1">
-        <ReactSortable 
-        list={images} 
-        className="flex flex-wrap gap-1"
-        setList={updateImagesOrder}>
+        <ReactSortable
+          list={images}
+          className="flex flex-wrap gap-1"
+          setList={updateImagesOrder}>
           {!!images?.length &&
             images.map((link) => (
               <div key={link} className="h-24 ">
