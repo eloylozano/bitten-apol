@@ -14,6 +14,11 @@ interface ProductFormProps {
   category: string;
 }
 
+interface Category {
+  _id: string;
+  name: string;
+}
+
 export default function ProductForm({
   _id,
   title: existingTitle,
@@ -29,7 +34,7 @@ export default function ProductForm({
   const [images, setImages] = useState(existingImages || "");
   const [goToProducts, setGoToProducts] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const router = useRouter();
 
   useEffect(() => {
@@ -66,7 +71,10 @@ export default function ProductForm({
       const res = await axios.post("/api/upload", data);
       console.log(res.data);
       setImages((oldImages) => {
-        return [...oldImages, ...res.data.links];
+        return [
+          ...oldImages,
+          ...res.data.links.map((link: string) => ({ id: link, src: link })),
+        ];
       });
       setIsUploading(false);
     }
