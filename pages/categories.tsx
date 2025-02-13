@@ -1,8 +1,12 @@
 import Layout from "@/components/Layout";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
-export default function Categories() {
+const MySwal = withReactContent(Swal);
+
+function Categories({ swal }) {
   const [editedCategory, setEditedCategory] = useState();
   const [name, setName] = useState("");
   const [parentCategory, setParentCategory] = useState("");
@@ -36,6 +40,24 @@ export default function Categories() {
     setEditedCategory(category);
     setName(category.name);
     setParentCategory(category.parent?._id);
+  }
+
+  async function deleteCategory(category) {
+    const result = await MySwal.fire({
+      title: `Are you sure?`,
+      text: `Do you want to delete ${category.name}`,
+      showCancelButton: true,
+      cancelButtonText: "Cancel",
+      confirmButtonText: "Yes, Delete!",
+      confirmButtonColor: "#d55",
+      reverseButtons: true,
+    }).then(async result => {
+      if (result.isConfirmed) {
+        const { _id } = category;
+        axios.delete("/api/categories?_id=" + _id);
+        fetchCategories();
+      }
+    });
   }
 
   return (
@@ -76,6 +98,7 @@ export default function Categories() {
           <tr>
             <td>Category name</td>
             <td>Parent category</td>
+            <td></td>
           </tr>
         </thead>
         <tbody>
@@ -92,7 +115,12 @@ export default function Categories() {
                     Edit
                   </button>
 
-                  <button className="btn-red">Delete</button>
+                  <button
+                    onClick={() => deleteCategory(category)}
+                    className="btn-red"
+                  >
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))}
@@ -101,3 +129,5 @@ export default function Categories() {
     </Layout>
   );
 }
+
+export default Categories;
