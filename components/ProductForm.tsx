@@ -1,5 +1,5 @@
 import Layout from "@/components/Layout";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import Spinner from "@/components/Spinner";
 import { useRouter } from "next/router";
@@ -11,6 +11,7 @@ interface ProductFormProps {
   description: string;
   price: number;
   images: string[];
+  category: string;
 }
 
 export default function ProductForm({
@@ -19,18 +20,27 @@ export default function ProductForm({
   description: existingDescription,
   price: existingPrice,
   images: existingImages,
+  category: assignedCategory,
 }: ProductFormProps) {
   const [title, setTitle] = useState(existingTitle || "");
   const [description, setdDescription] = useState(existingDescription || "");
+  const [category, setCategory] = useState(assignedCategory || "");
   const [price, setPrice] = useState(existingPrice || "");
   const [images, setImages] = useState(existingImages || "");
   const [goToProducts, setGoToProducts] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [categories, setCategories] = useState([]);
   const router = useRouter();
 
-  async function saveProduct(ev) {
+  useEffect(() => {
+    axios.get("/api/categories").then((result) => {
+      setCategories(result.data);
+    });
+  }, []);
+
+  async function saveProduct(ev: any) {
     ev.preventDefault();
-    const data = { title, description, price, images };
+    const data = { title, description, price, images, category };
     if (_id) {
       //update
       await axios.put("/api/products", { ...data, _id });
@@ -45,7 +55,7 @@ export default function ProductForm({
     router.push("/products");
   }
 
-  async function uploadImages(ev) {
+  async function uploadImages(ev: any) {
     const files = ev.target?.files;
     if (files?.length > 0) {
       setIsUploading(true);
@@ -62,7 +72,7 @@ export default function ProductForm({
     }
   }
 
-  function updateImagesOrder(images) {
+  function updateImagesOrder(images: any) {
     setImages(images);
   }
   return (
@@ -74,12 +84,23 @@ export default function ProductForm({
         value={title}
         onChange={(ev) => setTitle(ev.target.value)}
       />
+      <label>Category</label>
+      <select value={category} onChange={(ev) => setCategory(ev.target.value)}>
+        <option value="">Uncategorized</option>
+        {categories.length > 0 &&
+          categories.map((c) => (
+            <option key={c._id} value={c._id}>
+              {c.name}
+            </option>
+          ))}
+      </select>
       <label>Photos</label>
       <div className="mb-2 flex flex-wrap gap-1">
         <ReactSortable
           list={images}
           className="flex flex-wrap gap-1"
-          setList={updateImagesOrder}>
+          setList={updateImagesOrder}
+        >
           {!!images?.length &&
             images.map((link) => (
               <div key={link} className="h-24 ">
@@ -117,7 +138,6 @@ export default function ProductForm({
         value={description}
         onChange={(ev) => setdDescription(ev.target.value)}
       />
-
       <label>Price (in EUR)</label>
       <input
         type="number"
@@ -125,7 +145,6 @@ export default function ProductForm({
         value={price}
         onChange={(ev) => setPrice(ev.target.value)}
       />
-
       <button type="submit" className="btn-primary">
         Save
       </button>
