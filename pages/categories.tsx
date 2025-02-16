@@ -53,19 +53,19 @@ function Categories({ swal }) {
       }))
     );
   }
-  function deleteCategory(category) {
-    swal.fire({
-      title: 'Are you sure?',
-      text: `Do you want to delete ${category.name}?`,
+  async function deleteCategory(category) {
+    const result = await MySwal.fire({
+      title: `Are you sure?`,
+      text: `Do you want to delete ${category.name}`,
       showCancelButton: true,
-      cancelButtonText: 'Cancel',
-      confirmButtonText: 'Yes, Delete!',
-      confirmButtonColor: '#d55',
+      cancelButtonText: "Cancel",
+      confirmButtonText: "Yes, Delete!",
+      confirmButtonColor: "#d55",
       reverseButtons: true,
-    }).then(async result => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
         const { _id } = category;
-        await axios.delete('/api/categories?_id=' + _id);
+        await axios.delete("/api/categories?_id=" + _id);
         fetchCategories();
       }
     });
@@ -168,6 +168,7 @@ function Categories({ swal }) {
                 setEditedCategory(null);
                 setName('');
                 setParentCategory('');
+                setProperties([]);
               }}
               className="btn-default">Cancel</button>
           )}
