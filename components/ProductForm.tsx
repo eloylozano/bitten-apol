@@ -12,6 +12,7 @@ interface ProductFormProps {
   price: number;
   images: string[];
   category: string;
+  properties: {};
 }
 
 interface Category {
@@ -26,10 +27,12 @@ export default function ProductForm({
   price: existingPrice,
   images: existingImages,
   category: assignedCategory,
+  properties: assignedProperties,
 }: ProductFormProps) {
   const [title, setTitle] = useState(existingTitle || "");
   const [description, setdDescription] = useState(existingDescription || "");
   const [category, setCategory] = useState(assignedCategory || "");
+  const [productProperties, setProductProperties] = useState(assignedProperties || {});
   const [price, setPrice] = useState(existingPrice || "");
   const [images, setImages] = useState(existingImages || "");
   const [goToProducts, setGoToProducts] = useState(false);
@@ -45,7 +48,10 @@ export default function ProductForm({
 
   async function saveProduct(ev: any) {
     ev.preventDefault();
-    const data = { title, description, price, images, category };
+    const data = {
+      title, description, price, images, category,
+      properties: productProperties
+    };
     if (_id) {
       //update
       await axios.put("/api/products", { ...data, _id });
@@ -84,12 +90,21 @@ export default function ProductForm({
     setImages(images);
   }
 
+  function setProductProp(propName, value: any) {
+    setProductProperties(prev => {
+      const newProductProps = { ...prev };
+      newProductProps[propName] = value;
+      return newProductProps;
+    })
+  }
+
+
   const propertiesToFill = [];
   if (categories.length > 0 && category) {
     let catInfo = categories.find(({ _id }) => _id === category);
     propertiesToFill.push(...catInfo.properties);
-    
-    
+
+
     while (catInfo?.parent?._id) {
       const parentCat = categories.find(({ _id }) => _id === catInfo?.parent?._id);
       propertiesToFill.push(...parentCat.properties);
@@ -117,9 +132,24 @@ export default function ProductForm({
           ))}
       </select>
       {propertiesToFill.length > 0 && propertiesToFill.map(p => (
-        <div>{p.name}</div>
+        <div className="flex gap-1">
+          <div>{p.name}</div>
+          <select
+            value={productProperties[p.name]}
+            onChange={(ev) =>
+              setProductProp(p.name, ev.target.value)
+
+            }>
+            {p.values.map((v: any) =>
+            (<option value={v}>{v}</option>
+
+            ))}
+          </select>
+        </div>
       ))}
-      <label>Photos</label>
+      <label>
+        Photos
+      </label>
       <div className="mb-2 flex flex-wrap gap-1">
         <ReactSortable
           list={images}
