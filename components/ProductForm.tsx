@@ -83,6 +83,22 @@ export default function ProductForm({
   function updateImagesOrder(images: any) {
     setImages(images);
   }
+
+  const propertiesToFill = [];
+  if (categories.length > 0 && category) {
+    let catInfo = categories.find(({ _id }) => _id === category);
+    propertiesToFill.push(...catInfo.properties);
+    
+    
+    while (catInfo?.parent?._id) {
+      const parentCat = categories.find(({ _id }) => _id === catInfo?.parent?._id);
+      propertiesToFill.push(...parentCat.properties);
+      catInfo = parentCat;
+    }
+  }
+
+
+
   return (
     <form onSubmit={saveProduct}>
       <label>Product name</label>
@@ -97,11 +113,12 @@ export default function ProductForm({
         <option value="">Uncategorized</option>
         {categories.length > 0 &&
           categories.map((c) => (
-            <option key={c._id} value={c._id}>
-              {c.name}
-            </option>
+            <option value={c._id}>{c.name}</option>
           ))}
       </select>
+      {propertiesToFill.length > 0 && propertiesToFill.map(p => (
+        <div>{p.name}</div>
+      ))}
       <label>Photos</label>
       <div className="mb-2 flex flex-wrap gap-1">
         <ReactSortable
