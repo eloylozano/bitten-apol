@@ -5,6 +5,7 @@ import { mongooseConnect } from "@/lib/mongoose";
 import { getServerSession } from "next-auth/next";
 import { authOptions, isAdminRequest } from "./auth/[...nextauth]";
 
+
 export default async function handle(
   req: NextApiRequest,
   res: NextApiResponse
