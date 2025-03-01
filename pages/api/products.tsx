@@ -32,12 +32,9 @@ export default async function handle(
     res.json(productDoc);
   }
 
-  if (method === "PUT") {
-    const { _id, title, description, price, images, category, properties } = req.body;
-    await Product.updateMany(
-      { _id },
-      { title, description, price, images, category, properties }
-    );
+  if (method === 'PUT') {
+    const { title, description, price, images, category, properties, _id } = req.body;
+    await Product.updateOne({ _id }, { title, description, price, images, category, properties });
     res.json(true);
   }
 

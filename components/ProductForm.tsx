@@ -1,25 +1,18 @@
-import Layout from "@/components/Layout";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import axios from "axios";
 import Spinner from "@/components/Spinner";
-import { useRouter } from "next/router";
 import { ReactSortable } from "react-sortablejs";
 
+// Definir los tipos de los props para ProductForm
 interface ProductFormProps {
   _id?: string;
   title: string;
   description: string;
-  price: number;
-  images: { id: string; src: string }[]; // Cambié el tipo para que coincida con la estructura de las imágenes
+  price: string;
+  images: string[];
   category: string;
-  properties: Record<string, any>; // Uso Record para un objeto dinámico
-}
-
-interface Category {
-  _id: string;
-  name: string;
-  properties?: { name: string; values: string[] }[]; // Ajusté esto para asegurarme de que sea compatible
-  parent?: Category;
+  properties: { [key: string]: string };
 }
 
 export default function ProductForm({
@@ -34,12 +27,12 @@ export default function ProductForm({
   const [title, setTitle] = useState<string>(existingTitle || "");
   const [description, setDescription] = useState<string>(existingDescription || "");
   const [category, setCategory] = useState<string>(assignedCategory || "");
-  const [productProperties, setProductProperties] = useState<Record<string, any>>(assignedProperties || {});
-  const [price, setPrice] = useState<number>(existingPrice || 0); // Cambié el tipo a number
-  const [images, setImages] = useState<{ id: string; src: string }[]>(existingImages || []); // Cambié el tipo aquí
-  const [goToProducts, setGoToProducts] = useState<boolean>(false); // Añadí el tipo explícito
-  const [isUploading, setIsUploading] = useState<boolean>(false); // Añadí el tipo explícito
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [productProperties, setProductProperties] = useState<{ [key: string]: string }>(assignedProperties || {});
+  const [price, setPrice] = useState<string>(existingPrice || "");
+  const [images, setImages] = useState<string[]>(existingImages || []);
+  const [goToProducts, setGoToProducts] = useState<boolean>(false);
+  const [isUploading, setIsUploading] = useState<boolean>(false);
+  const [categories, setCategories] = useState<any[]>([]); // Se podría especificar mejor el tipo de categoría
   const router = useRouter();
 
   useEffect(() => {
@@ -59,10 +52,10 @@ export default function ProductForm({
       properties: productProperties,
     };
     if (_id) {
-      //update
+      // Update
       await axios.put("/api/products", { ...data, _id });
     } else {
-      // create
+      // Create
       await axios.post("/api/products", data);
     }
     setGoToProducts(true);
@@ -81,20 +74,16 @@ export default function ProductForm({
         data.append("file", file);
       }
       const res = await axios.post("/api/upload", data);
-      console.log(res.data);
-      setImages((oldImages) => [
-        ...oldImages,
-        ...res.data.links.map((link: string) => ({ id: link, src: link })),
-      ]);
+      setImages((oldImages) => [...oldImages, ...res.data.links]);
       setIsUploading(false);
     }
   }
 
-  function updateImagesOrder(images: { id: string; src: string }[]) {
+  function updateImagesOrder(images: string[]) {
     setImages(images);
   }
 
-  function setProductProp(propName: string, value: any) {
+  function setProductProp(propName: string, value: string) {
     setProductProperties((prev) => {
       const newProductProps = { ...prev };
       newProductProps[propName] = value;
@@ -102,19 +91,13 @@ export default function ProductForm({
     });
   }
 
-  const propertiesToFill = [];
+  const propertiesToFill: { name: string; values: string[] }[] = [];
   if (categories.length > 0 && category) {
-    let catInfo = categories.find(({ _id }) => _id === category);
-
-    if (catInfo?.properties) {
-      propertiesToFill.push(...catInfo.properties);
-    }
-
+    let catInfo = categories.find(({ _id }: { _id: string }) => _id === category);
+    propertiesToFill.push(...catInfo?.properties || []);
     while (catInfo?.parent?._id) {
-      const parentCat = categories.find(({ _id }) => _id === catInfo.parent._id);
-      if (parentCat?.properties) {
-        propertiesToFill.push(...parentCat.properties);
-      }
+      const parentCat = categories.find(({ _id }: { _id: string }) => _id === catInfo?.parent?._id);
+      propertiesToFill.push(...parentCat?.properties || []);
       catInfo = parentCat;
     }
   }
@@ -126,37 +109,45 @@ export default function ProductForm({
         type="text"
         placeholder="product name"
         value={title}
-        onChange={(ev) => setTitle(ev.target.value)} />
+        onChange={(ev) => setTitle(ev.target.value)}
+      />
       <label>Category</label>
       <select value={category} onChange={(ev) => setCategory(ev.target.value)}>
         <option value="">Uncategorized</option>
-        {categories.length > 0 && categories.map(c => (
-          <option key={c._id} value={c._id}>{c.name}</option>
-        ))}
+        {categories.length > 0 &&
+          categories.map((c) => (
+            <option key={c._id} value={c._id}>
+              {c.name}
+            </option>
+          ))}
       </select>
-      {propertiesToFill.length > 0 && propertiesToFill.map(p => (
-        <div key={p.name} className="">
-          <label>{p.name[0].toUpperCase() + p.name.substring(1)}</label>
-          <div>
-            <select value={productProperties[p.name]} onChange={ev => setProductProp(p.name, ev.target.value)}>
-              {p.values.map(v => (
-                <option key={v} value={v}>{v}</option>
-              ))}
-            </select>
+      {propertiesToFill.length > 0 &&
+        propertiesToFill.map((p) => (
+          <div key={p.name} className="">
+            <label>{p.name[0].toUpperCase() + p.name.substring(1)}</label>
+            <div>
+              <select
+                value={productProperties[p.name]}
+                onChange={(ev) => setProductProp(p.name, ev.target.value)}
+              >
+                {p.values.map((v) => (
+                  <option key={v} value={v}>
+                    {v}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
       <label>Photos</label>
       <div className="mb-2 flex flex-wrap gap-1">
-        <ReactSortable
-          list={images}
-          className="flex flex-wrap gap-1"
-          setList={updateImagesOrder}>
-          {!!images?.length && images.map(link => (
-            <div key={link.id} className="h-24 bg-white p-4 shadow-sm rounded-sm border border-gray-200">
-              <img src={link.src} alt="" className="rounded-lg" />
-            </div>
-          ))}
+        <ReactSortable list={images} className="flex flex-wrap gap-1" setList={updateImagesOrder}>
+          {!!images?.length &&
+            images.map((link) => (
+              <div key={link} className="h-24 bg-white p-4 shadow-sm rounded-sm border border-gray-200">
+                <img src={link} alt="" className="rounded-lg" />
+              </div>
+            ))}
         </ReactSortable>
         {isUploading && (
           <div className="h-24 flex items-center">
@@ -172,17 +163,17 @@ export default function ProductForm({
         </label>
       </div>
       <label>Description</label>
-      <textarea
-        placeholder="description"
-        value={description}
-        onChange={ev => setDescription(ev.target.value)} />
+      <textarea placeholder="description" value={description} onChange={(ev) => setDescription(ev.target.value)} />
       <label>Price (in USD)</label>
       <input
         type="number"
         placeholder="price"
         value={price}
-        onChange={ev => setPrice(Number(ev.target.value))} />
-      <button type="submit" className="btn-primary">Save</button>
+        onChange={(ev) => setPrice(ev.target.value)}
+      />
+      <button type="submit" className="btn-primary">
+        Save
+      </button>
     </form>
   );
 }
