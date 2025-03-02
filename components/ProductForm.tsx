@@ -102,6 +102,12 @@ export default function ProductForm({
     }
   }
 
+  // Función para eliminar una imagen
+  function deleteImage(imageToDelete: string) {
+    setImages((prevImages) => prevImages.filter(image => image !== imageToDelete));
+  }
+
+
   return (
     <form onSubmit={saveProduct}>
       <label>Product name</label>
@@ -144,11 +150,24 @@ export default function ProductForm({
         <ReactSortable list={images} className="flex flex-wrap gap-1" setList={updateImagesOrder}>
           {!!images?.length &&
             images.map((link) => (
-              <div key={link} className="h-24 bg-white p-4 shadow-sm rounded-sm border border-gray-200">
+              <div key={link} className="h-24 bg-white p-4 shadow-sm rounded-sm border border-gray-200 relative">
                 <img src={link} alt="" className="rounded-lg" />
+
+                {/* Botón X en la parte superior derecha */}
+                <button
+                  type="button"
+                  onClick={() => deleteImage(link)}
+                  className="absolute top-1 right-1 text-red-500 text-lg font-bold"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="size-5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+                  </svg>
+
+                </button>
               </div>
             ))}
         </ReactSortable>
+
         {isUploading && (
           <div className="h-24 flex items-center">
             <Spinner />
