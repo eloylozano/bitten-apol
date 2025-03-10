@@ -18,7 +18,7 @@ Este proyecto es una aplicación de un ecommerce desarrollado con Next.js, Mongo
 ## 🚀 Instalación y ejecución
 ### 1️⃣ Clonar el repositorio
 ```bash
- git clone https://github.com/tu-usuario/tu-repo.git
+ git clone https://github.com/eloylozano/bitten-apol.git
  cd tu-repo
 ```
 ### 2️⃣ Instalar dependencias
