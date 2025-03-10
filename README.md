@@ -1,40 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+# 🛒 BittenApol
 
-## Getting Started
+Este proyecto es una aplicación de un ecommerce desarrollado con Next.js, MongoDB y TypeScript. Permite a los usuarios agregar productos al carrito y gestionar su dirección de envío.
 
-First, run the development server:
+## 📌 Características
+- Agregar y eliminar productos del carrito.
+- Recuperación automática de la dirección del usuario.
+- Integración con MongoDB para almacenar usuarios y direcciones.
+- Checkout (pendiente de implementación).
 
+## 🛠️ Tecnologías utilizadas
+- **Frontend:** Next.js, React, TypeScript
+- **Backend:** API Routes en Next.js
+- **Base de datos:** MongoDB con Mongoose, AWS, 
+- **Autenticación:** Google Cloud
+- **Manejo de estado:** Context API
+
+## 🚀 Instalación y ejecución
+### 1️⃣ Clonar el repositorio
+```bash
+ git clone https://github.com/tu-usuario/tu-repo.git
+ cd tu-repo
+```
+### 2️⃣ Instalar dependencias
+```bash
+npm install
+```
+### 3️⃣ Configurar variables de entorno
+Crea un archivo `.env.local` en la raíz del proyecto con los siguientes valores:
+```env
+MONGO_URI=mongodb+srv://tu_usuario:tu_contraseña@cluster.mongodb.net/tu_db
+NEXT_PUBLIC_STRIPE_KEY=tu_stripe_key
+```
+### 4️⃣ Ejecutar el proyecto
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```
+El proyecto estará disponible en `http://localhost:3000`
+
+## 🔧 Estructura del proyecto
+```
+📂 app/
+ ├── 📂 models/          # Modelos de Mongoose
+ ├── 📂 api/             # Rutas API para manejar datos
+ ├── 📂 account/         # Página de perfil del usuario
+ ├── 📂 cart/            # Página del carrito de compras
+ ├── 📂 checkout/        # Página de checkout
+ ├── 📂 components/      # Componentes reutilizables
+ ├── 📜 layout.tsx       # Layout principal
+ ├── 📜 page.tsx         # Página principal
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
-
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+## 📜 Licencia
+Este proyecto está bajo la licencia MIT.
