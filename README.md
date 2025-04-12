@@ -1,54 +1,59 @@
-# 🛒 BittenApol
+# ⚙️ BittenApol - Admin Panel
 
-Este proyecto es una aplicación de un ecommerce desarrollado con Next.js, MongoDB y TypeScript. Permite a los usuarios agregar productos al carrito y gestionar su dirección de envío.
+This is the admin dashboard for the BittenApol e-commerce platform. It allows administrators to manage products, view orders, and oversee user activity.
 
-## 📌 Características
-- Agregar y eliminar productos del carrito.
-- Recuperación automática de la dirección del usuario.
-- Integración con MongoDB para almacenar usuarios y direcciones.
-- Checkout (pendiente de implementación).
+## 📌 Features
 
-## 🛠️ Tecnologías utilizadas
+- Product management (Create, Edit, Delete)
+- User and role management
+- Order tracking and status updates
+- Protected admin routes with role-based access
+- Clean and responsive admin interface
+
+## 🛠️ Technologies Used
+
 - **Frontend:** Next.js, React, TypeScript
-- **Backend:** API Routes en Next.js
-- **Base de datos:** MongoDB con Mongoose, AWS, 
-- **Autenticación:** Google Cloud
-- **Manejo de estado:** Context API
+- **Backend:** API Routes (Next.js)
+- **Database:** MongoDB (via Mongoose)
+- **Auth:** JWT or session-based (NextAuth, Google OAuth, etc.)
+- **UI:** Tailwind CSS (or custom admin UI)
 
-## 🚀 Instalación y ejecución
-### 1️⃣ Clonar el repositorio
+## 🚀 Getting Started
+
+### 1️⃣ Clone the repository
+
 ```bash
- git clone https://github.com/eloylozano/bitten-apol.git
- cd tu-repo
+git clone https://github.com/eloylozano/bitten-apol-admin.git
+cd bitten-apol-admin
 ```
-### 2️⃣ Instalar dependencias
+
+2️⃣ Install dependencies
 ```bash
 npm install
 ```
-### 3️⃣ Configurar variables de entorno
-Crea un archivo `.env.local` en la raíz del proyecto con los siguientes valores:
+
+3️⃣ Configure environment variables
+Create a .env.local file in the root with:
 ```env
-MONGO_URI=mongodb+srv://tu_usuario:tu_contraseña@cluster.mongodb.net/tu_db
-NEXT_PUBLIC_STRIPE_KEY=tu_stripe_key
+MONGO_URI=mongodb+srv://your_user:your_password@cluster.mongodb.net/your_db
+ADMIN_SECRET_KEY=your_secret_key
+NEXTAUTH_SECRET=your_nextauth_secret
+NEXTAUTH_URL=http://localhost:3000
 ```
-### 4️⃣ Ejecutar el proyecto
+
+4️⃣ Run the project
 ```bash
 npm run dev
+Access the dashboard at: http://localhost:3000/admin
 ```
-El proyecto estará disponible en `http://localhost:3000`
 
-## 🔧 Estructura del proyecto
-```
+📁 Project Structure
+```bash
 📂 app/
- ├── 📂 models/          # Modelos de Mongoose
- ├── 📂 api/             # Rutas API para manejar datos
- ├── 📂 account/         # Página de perfil del usuario
- ├── 📂 cart/            # Página del carrito de compras
- ├── 📂 checkout/        # Página de checkout
- ├── 📂 components/      # Componentes reutilizables
- ├── 📜 layout.tsx       # Layout principal
- ├── 📜 page.tsx         # Página principal
+ ├── 📂 admin/           # Admin routes and pages
+ ├── 📂 api/             # Backend API routes
+ ├── 📂 components/      # Shared dashboard components
+ ├── 📂 models/          # Mongoose schemas
+ ├── 📜 layout.tsx       # App layout
+ ├── 📜 page.tsx         # Main landing (if applicable)
 ```
-
-## 📜 Licencia
-Este proyecto está bajo la licencia MIT.
